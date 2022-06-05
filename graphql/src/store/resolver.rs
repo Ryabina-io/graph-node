@@ -128,7 +128,7 @@ impl StoreResolver {
         match bc {
             BlockConstraint::Hash(hash) => {
                 store
-                    .block_number(hash)
+                    .block_number(&hash)
                     .map_err(Into::into)
                     .and_then(|number| {
                         number
@@ -138,7 +138,7 @@ impl StoreResolver {
                                     "no block with that hash found".to_owned(),
                                 )
                             })
-                            .map(|number| BlockPtr::from((hash, number as u64)))
+                            .map(|number| BlockPtr::new(hash, number))
                     })
             }
             BlockConstraint::Number(number) => {
