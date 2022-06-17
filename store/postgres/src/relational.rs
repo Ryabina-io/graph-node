@@ -649,15 +649,15 @@ impl Layout {
         // number of attributes each entity type has.
         // We add 1 to account for the `block_range` bind parameter
         let chunk_size = POSTGRES_MAX_PARAMETERS / (table.columns.len() + 1);
-        info!(
-            logger,
-            "Inserting entities";
-            "entity_type" => entity_type.to_string(),
-            "number_of_entities" => entities.len(),
-            "number_of_entity_keys" => entity_keys.len(),
-            "number_of_columns" => table.columns.len(),
-            "chunk_size" => chunk_size
+
+        println!("Inserting entities entity_type: {}, number_of_entities: {}, number_of_entity_keys: {},  number_of_columns: {}, chunk_size: {}",
+            entity_type.to_string(),
+            entities.len(),
+            entity_keys.len(),
+            table.columns.len(),
+            chunk_size
         );
+
         for chunk in entities.chunks_mut(chunk_size) {
             count += InsertQuery::new(table, chunk, block)?
                 .get_results(conn)
@@ -805,14 +805,12 @@ impl Layout {
         // number of attributes each entity type has.
         // We add 1 to account for the `block_range` bind parameter
         let chunk_size = POSTGRES_MAX_PARAMETERS / (table.columns.len() + 1);
-        info!(
-            logger,
-            "Updating entities";
-            "entity_type" => entity_type.to_string(),
-            "number_of_entities" => entities.len(),
-            "number_of_entity_keys" => entity_keys.len(),
-            "number_of_columns" => table.columns.len(),
-            "chunk_size" => chunk_size
+        println!("Updating entities: {}, number_of_entities: {}, number_of_entity_keys: {},  number_of_columns: {}, chunk_size: {}",
+            entity_type.to_string(),
+            entities.len(),
+            entity_keys.len(),
+            table.columns.len(),
+            chunk_size
         );
         for chunk in entities.chunks_mut(chunk_size) {
             count += InsertQuery::new(table, chunk, block)?.execute(conn)?;
